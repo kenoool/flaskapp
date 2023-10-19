@@ -63,6 +63,15 @@ def update(id):
         flash("Data Updated Successfully")
         mysql.connection.commit()
         return redirect(url_for('index'))
+    
+@app.route('/delete/<id_data>', methods=['POST', 'GET'])
+def delete(id_data):
+        flash("Data Deleted Successfully")
+        cur = mysql.connection.cursor()
+        cur.execute("DELETE FROM students WHERE id = %s", (id_data,))
+        mysql.connection.commit()
+        return redirect(url_for('index'))
+
 
 
 
