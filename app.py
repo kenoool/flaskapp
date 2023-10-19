@@ -24,7 +24,7 @@ def index():
     data = cur.fetchall()
     cur.close()
 
-    return render_template('index.html', students= data)
+    return render_template('index.html', students=data)
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -33,7 +33,7 @@ def insert():
         # Fetch form data
         userDetails = request.form
         id = userDetails['id']
-        firstname = userDetails['firstname']
+        firstname = userDetails['firstname'][:10]
         lastname = userDetails['lastname']
         course = userDetails['course']
         year = userDetails['year']
@@ -43,26 +43,26 @@ def insert():
         mysql.connection.commit()
         return redirect(url_for('index'))
 
-
-@app.route('/update',methods=['POST','GET'])
-def update():
-
+@app.route('/update/<id>', methods=['POST','GET'])
+def update(id):
     if request.method == 'POST':
-        id_data = request.form['id']
-        name = request.form['name']
-        email = request.form['email']
-        phone = request.form['phone']
+        id_data = id
+        firstname = request.form['firstname']
+        lastname = request.form['lastname']
+        course = request.form['course']
+        year = request.form['year']
+        gender = request.form['gender']
+
         cur = mysql.connection.cursor()
-        cur.execute("""
-               UPDATE students
-               SET name=%s, email=%s, phone=%s
-               WHERE id=%s
-            """, (name, email, phone, id_data))
+        cur.execute( """
+        UPDATE students
+        SET firstname=%s, lastname=%s, course=%s, year=%s, gender=%s
+        WHERE id=%s
+    
+        """, (firstname,lastname,course,year,gender,id_data))   
         flash("Data Updated Successfully")
         mysql.connection.commit()
-        return redirect(url_for('Index'))
-
-
+        return redirect(url_for('index'))
 
 
 
