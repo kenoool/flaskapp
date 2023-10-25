@@ -1,0 +1,32 @@
+{% extends 'index.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+    <!-- Your content for the Courses page goes here -->
+    <h1>Courses</h1>
+
+    <form method="POST" action="/insert_course">
+        <div class="form-group">
+            <label for="course">Select Course:</label>
+            <select class="form-control" id="course" name="course">
+                <option value="Math">Math</option>
+                <option value="Science">Science</option>
+                <option value="History">History</option>
+                <!-- Add more course options as needed -->
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Insert Course</button>
+    </form>
+
+    <table class="table table-striped">
+        <!-- Display course information here -->
+        {% for course in courses %}
+            <tr>
+                <td>{{ course.name }}</td>
+                <td>{{ course.description }}</td>
+                <!-- Add more columns as needed -->
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

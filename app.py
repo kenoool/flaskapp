@@ -19,12 +19,48 @@ mysql = MySQL(app)
 
 @app.route('/')
 def index():
+    return redirect(url_for('students'))
+
+# Add or update the route for the students page ("/students") as follows:
+@app.route('/students')
+@app.route('/students')
+def students():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM students")
+    student_data = cur.fetchall()
+    
+    cur.execute("SELECT * FROM courses")  # Query the courses table
+    courses_data = cur.fetchall()
+
+    cur.close()
+
+    return render_template('students.html', students=student_data, courses=courses_data)
+
+
+# Define a route for the "Courses" page
+@app.route('/courses')
+def courses():
+    # Implement the logic to fetch and display course information
+    # Example: Query the database for course data
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM courses")
     data = cur.fetchall()
     cur.close()
 
-    return render_template('index.html', students=data)
+    return render_template('courses.html', courses=data)
+
+# Define a route for the "Colleges" page
+@app.route('/colleges')
+def colleges():
+    # Implement the logic to fetch and display college information
+    # Example: Query the database for college data
+    cur = mysql.connection.cursor()
+    cur.execute("SELECT * FROM colleges")
+    data = cur.fetchall()
+    cur.close()
+
+    return render_template('colleges.html', colleges=data)
+
 
 @app.route('/insert', methods=['POST'])
 def insert():
@@ -72,10 +108,18 @@ def delete(id_data):
         mysql.connection.commit()
         return redirect(url_for('index'))
 
-
-
-
-
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+    if request.method == 'POST':
+        search_term = request.form['search_term']
+        field = request.form['search_field']
+        query = f"SELECT * FROM student WHERE {field} LIKE %s"
+        cur = mysql.connection.cursor()
+        cur.execute(query, ('%' + search_term + '%',))
+        results = cur.fetchall()
+        cur.close()
+        return render_template('index.html', students=results)
+    return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)

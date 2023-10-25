@@ -1,0 +1,90 @@
+{% extends 'index.html' %}
+
+{% block title %}Students{% endblock %}
+
+{% block content %}
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-3xl font-semibold text-gray-800">Students</h2>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-toggle="modal" data-target="#createModal">Create</button>
+        </div>
+
+        <table class="table-auto w-full border-collapse">
+            <thead>
+                <tr class="bg-blue-500 text-white">
+                    <th class="px-4 py-2">ID</th>
+                    <th class="px-4 py-2">First Name</th>
+                    <th class="px-4 py-2">Last Name</th>
+                    <th class="px-4 py-2">Course</th>
+                    <th class="px-4 py-2">Year</th>
+                    <th class="px-4 py-2">Gender</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                    <tr class="border">
+                        <td class="px-4 py-2">{{ student.0 }}</td>
+                        <td class="px-4 py-2">{{ student.1 }}</td>
+                        <td class="px-4 py-2">{{ student.2 }}</td>
+                        <td class="px-4 py-2">{{ student.3 }}</td>
+                        <td class="px-4 py-2">{{ student.4 }}</td>
+                        <td class="px-4 py-2">{{ student.5 }}</td>
+                        <td class="px-4 py-2">
+                            <a href="/update/{{ student.0 }}" class="text-blue-500 hover:text-blue-700 mr-2" data-toggle="modal" data-target="#modaledit{{ student.0 }}">Update</a>
+                            <a href="/delete/{{ student.0 }}" class="text-red-500 hover:text-red-700" onclick="return confirm('Are You Sure You Want To Delete?')">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Create Student Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header bg-blue-500 text-white">
+                    <h5 class="modal-title" id="createModalLabel">Create Student</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="/insert">
+                        <div class="mb-4">
+                            <label for="id" class="block text-gray-700 font-bold mb-2">ID:</label>
+                            <input type="text" name="id" id="id" class="border rounded w-full py-2 px-3" placeholder="Enter ID">
+                        </div>
+                        <div class="mb-4">
+                            <label for="firstname" class="block text-gray-700 font-bold mb-2">First Name:</label>
+                            <input type="text" name="firstname" id="firstname" class="border rounded w-full py-2 px-3" placeholder="Enter First Name">
+                        </div>
+                        <div class="mb-4">
+                            <label for="lastname" class="block text-gray-700 font-bold mb-2">Last Name:</label>
+                            <input type="text" name="lastname" id="lastname" class="border rounded w-full py-2 px-3" placeholder="Enter Last Name">
+                        </div>
+                        <div class="mb-4">
+                            <label for="course" class="block text-gray-700 font-bold mb-2">Course:</label>
+                            <select name="course" class="border rounded w-full py-2 px-3">
+                                <option value="">Select a course</option>
+                                {% for course in courses %}
+                                    <option value="{{ course[0] }}">{{ course[1] }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="year" class="block text-gray-700 font-bold mb-2">Year:</label>
+                            <input type="text" name="year" id="year" class="border rounded w-full py-2 px-3" placeholder="Enter Year">
+                        </div>
+                        <div class="mb-4">
+                            <label for="gender" class="block text-gray-700 font-bold mb-2">Gender:</label>
+                            <input type="text" name="gender" id="gender" class="border rounded w-full py-2 px-3" placeholder="Enter Gender">
+                        </div>
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'index.html' %}
+
+{% block title %}Colleges{% endblock %}
+
+{% block content %}
+    <!-- Your content for the Colleges page goes here -->
+    <h1>Colleges</h1>
+
+    <table class="table table-striped">
+        <!-- Display college information here -->
+        {% for college in colleges %}
+            <tr>
+                <td>{{ college.name }}</td>
+                <td>{{ college.description }}</td>
+                <!-- Add more columns as needed -->
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
