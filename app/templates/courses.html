@@ -1,0 +1,48 @@
+{% extends 'index.html' %}
+
+{% block title %}Courses{% endblock %}
+
+{% block content %}
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-3xl font-semibold text-gray-800">Courses</h2>
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-toggle="modal" data-target="#createCourseModal">Create</button>
+        </div>
+
+        <table class="table-auto w-full border-collapse">
+            <thead>
+                <tr class="bg-blue-500 text-white">
+                    <th class="px-4 py-2">ID</th>
+                    <th class="px-4 py-2">Code</th>
+                    <th class="px-4 py-2">Name</th>
+                    <th class="px-4 py-2">College</th>
+                    <th class="px-4 py-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in courses %}
+                    <tr class="border">
+                        <td class="px-4 py-2">{{ course[0] }}</td>
+                        <td class="px-4 py-2">{{ course[1] }}</td>
+                        <td class="px-4 py-2">{{ course[2] }}</td>
+                        <td class="px-4 py-2">{{ course[3] }}</td>
+                        <td class="px-4 py-2">
+                            <a href="/courses/update/{{ course[0] }}" class="text-blue-500 hover:text-blue-700 mr-2" data-toggle="modal" data-target="#editCourseModal">Update</a>
+                            <a href="/courses/delete/{{ course[0] }}" class="text-red-500 hover:text-red-700" onclick="return confirm('Are You Sure You Want To Delete?')">Delete</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Create Course Modal -->
+    <div class="modal fade" id="createCourseModal" tabindex="-1" role="dialog" aria-labelledby="createCourseModalLabel" aria-hidden="true">
+        <!-- Modal content goes here -->
+    </div>
+    
+    <!-- Edit Course Modal -->
+    <div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel" aria-hidden="true">
+        <!-- Modal content goes here -->
+    </div>
+{% endblock %}
