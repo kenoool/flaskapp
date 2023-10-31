@@ -12,7 +12,7 @@
         <table class="table-auto w-full border-collapse">
             <thead>
                 <tr class="bg-blue-500 text-white">
-                    <th class="px-4 py-2"f>Code</th>
+                    <th class="px-4 py-2">Code</th>
                     <th class="px-4 py-2">Name</th>
                     <th class="px-4 py-2">Action</th>
                 </tr>
@@ -20,8 +20,8 @@
             <tbody>
                 {% for college in colleges %}
                     <tr class="border">
-                        <td class="px-4 py-2">{{ college[0] }}</td>
                         <td class="px-4 py-2">{{ college[1] }}</td>
+                        <td class="px-4 py-2">{{ college[2] }}</td>
                         <td class="px-4 py-2">
                             <a href="/update/{{ college[0] }}" class="text-blue-500 hover:text-blue-700 mr-2" data-toggle="modal" data-target="#updateModal{{ college[0] }}">Update</a>
                             <a href="/delete/{{ college[0] }}" class="text-red-500 hover:text-red-700" data-toggle="modal" data-target="#deleteModal{{ college[0] }}">Delete</a>
@@ -73,11 +73,11 @@
                     <form method="POST" action="/update_colleges/{{ college[0] }}">
                         <div class="mb-4">
                             <label for="code" class="block text-gray-700 font-bold mb-2">Code:</label>
-                            <input type="text" name="code" id="code" class="border rounded w-full py-2 px-3" placeholder="Enter Code" value="{{ college[0] }}">
+                            <input type="text" name="code" id="code" class="border rounded w-full py-2 px-3" placeholder="Enter Code" value="{{ college[1] }}">
                         </div>
                         <div class="mb-4">
                             <label for="name" class="block text-gray-700 font-bold mb-2">Name:</label>
-                            <input type="text" name="name" id="name" class="border rounded w-full py-2 px-3" placeholder="Enter Name" value="{{ college[1] }}">
+                            <input type="text" name="name" id="name" class="border rounded w-full py-2 px-3" placeholder="Enter Name" value="{{ college[2] }}">
                         </div>
                         <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update</button>
                     </form>

@@ -14,7 +14,7 @@ def index():
 def students():
     cur = mysql.connection.cursor()
     cur.execute("SELECT * FROM students")
-    student_data = cur.fetchall()
+    students_data = cur.fetchall()
 
     cur.execute("SELECT * FROM colleges")  # Query the courses table
     colleges_data = cur.fetchall()
@@ -24,20 +24,24 @@ def students():
 
     cur.close()
 
-    return render_template('students.html', students=student_data, courses=courses_data, colleges=colleges_data)
+    return render_template('students.html', students=students_data, courses=courses_data, colleges=colleges_data)
 
 
 # Define a route for the "Courses" page
 @app.route('/courses')
 def courses():
-    # Implement the logic to fetch and display course information
-    # Example: Query the database for course data
     cur = mysql.connection.cursor()
-    cur.execute("SELECT * FROM courses")
-    data = cur.fetchall()
+
+    cur.execute("SELECT * FROM colleges")  # Query the courses table
+    colleges_data = cur.fetchall()
+    
+    cur.execute("SELECT * FROM courses")  # Query the courses table
+    courses_data = cur.fetchall()
+
     cur.close()
 
-    return render_template('courses.html', courses=data)
+    return render_template('courses.html', courses=courses_data, colleges=colleges_data)
+
 
 # Define a route for the "Colleges" page
 @app.route('/colleges')

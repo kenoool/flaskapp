@@ -3,46 +3,137 @@
 {% block title %}Courses{% endblock %}
 
 {% block content %}
-    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-        <div class="flex justify-between items-center mb-4">
-            <h2 class="text-3xl font-semibold text-gray-800">Courses</h2>
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" data-toggle="modal" data-target="#createCourseModal">Create</button>
-        </div>
 
-        <table class="table-auto w-full border-collapse">
-            <thead>
-                <tr class="bg-blue-500 text-white">
-                    <th class="px-4 py-2">ID</th>
-                    <th class="px-4 py-2">Code</th>
-                    <th class="px-4 py-2">Name</th>
-                    <th class="px-4 py-2">College</th>
-                    <th class="px-4 py-2">Action</th>
+<div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+    <div class="flex justify-between items-center mb-4">
+        <h2 class="text-3xl font-semibold text-gray-800">Courses</h2>
+        <button class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus-outline-none focus-shadow-outline" data-toggle="modal" data-target="#createModal">Create</button>
+    </div>
+
+    <table class="table-auto w-full border-collapse">
+        <thead>
+            <tr class="bg-blue-500 text-white">
+                <th class="px-4 py-2">Code</th>
+                <th class="px-4 py-2">Name</th>
+                <th class="px-4 py-2">College</th>
+                <th class="px-4 py-2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for course in courses %}
+                <tr class="border">
+                    <td class="px-4 py-2">{{ course.1 }}</td>
+                    <td class="px-4 py-2">{{ course.2 }}</td>
+                    <td class="px-4 py-2">{{ course.4 }}</td>
+                    <td class="px-4 py-2">
+                        <a href="/update/{{ course.0 }}" class="text-blue-500 hover:text-blue-700 mr-2" data-toggle="modal" data-target="#updateModal{{ course[0] }}">Update</a>
+                        <a href="/delete/{{ course.0 }}" class="text-red-500 hover:text-red-700" data-toggle="modal" data-target="#deleteModal{{ course[0] }}">Delete</a>
+                    </td>
+                    </td>
                 </tr>
-            </thead>
-            <tbody>
-                {% for course in courses %}
-                    <tr class="border">
-                        <td class="px-4 py-2">{{ course[0] }}</td>
-                        <td class="px-4 py-2">{{ course[1] }}</td>
-                        <td class="px-4 py-2">{{ course[2] }}</td>
-                        <td class="px-4 py-2">{{ course[3] }}</td>
-                        <td class="px-4 py-2">
-                            <a href="/courses/update/{{ course[0] }}" class="text-blue-500 hover:text-blue-700 mr-2" data-toggle="modal" data-target="#editCourseModal">Update</a>
-                            <a href="/courses/delete/{{ course[0] }}" class="text-red-500 hover:text-red-700" onclick="return confirm('Are You Sure You Want To Delete?')">Delete</a>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
 
-    <!-- Create Course Modal -->
-    <div class="modal fade" id="createCourseModal" tabindex="-1" role="dialog" aria-labelledby="createCourseModalLabel" aria-hidden="true">
-        <!-- Modal content goes here -->
+<!-- Create Course Modal -->
+<div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-500 text-white">
+                <h5 class="modal-title" id="createModalLabel">Create Course</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/insert_courses">
+                    <!-- Add the dropdown for college selection -->
+                    <div class="mb-4">
+                        <select name="college_code" id="college_code" class="border rounded w-full py-2 px-3">
+                            <option value="college_code">Select College</option>
+                            {% for college in colleges %}
+                                <option value="{{ college[1] }}">{{ college[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="code" class="block text-gray-700 font-bold mb-2">Code:</label>
+                        <input type="text" name="code" id="code" class="border rounded w-full py-2 px-3" placeholder="Enter Code">
+                    </div>
+                    <div class="mb-4">
+                        <label for="name" class="block text-gray-700 font-bold mb-2">Name:</label>
+                        <input type="text" name="name" id="name" class="border rounded w-full py-2 px-3" placeholder="Enter Name">
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Create</button>
+                </form>
+            </div>
+        </div>
     </div>
-    
-    <!-- Edit Course Modal -->
-    <div class="modal fade" id="editCourseModal" tabindex="-1" role="dialog" aria-labelledby="editCourseModalLabel" aria-hidden="true">
-        <!-- Modal content goes here -->
+</div>
+
+{% for course in courses %}
+<div class="modal fade" id="updateModal{{ course[0] }}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{ course[0] }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-blue-500 text-white">
+                <h5 class="modal-title" id="updateModalLabel{{ course[0] }}">Update Course</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="/update_courses/{{ course[0] }}">
+                    <input type="hidden" name="course_id" value="{{ course[0] }}">
+                    <!-- Add the dropdown for college selection -->
+                    <div class="mb-4">
+                        <label for="college_code" class="block text-gray-700 font-bold mb-2">College:</label>
+                        <select name="college_code" id="college_code" class="border rounded w-full py-2 px-3">
+                            <option value="">Select College</option>
+                            {% for college in colleges %}
+                                <option value="{{ college[1] }}">{{ college[1] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>                    
+                    <div class="mb-4">
+                        <label for="code" class="block text-gray-700 font-bold mb-2">Code:</label>
+                        <input type="text" name="code" id="code" class="border rounded w-full py-2 px-3" placeholder="Enter Code" value="{{ course[1] }}">
+                    </div>
+                    <div class="mb-4">
+                        <label for = "name" class="block text-gray-700 font-bold mb-2">Name:</label>
+                        <input type="text" name="name" id="name" class="border rounded w-full py-2 px-3" placeholder="Enter Name" value="{{ course[2] }}">
+                    </div>
+                    <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Update</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
+{% endfor %}
+
+{% for course in courses %}
+<div class="modal fade" id="deleteModal{{ course[0] }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ course[0] }}" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-red-500 text-white">
+                <h5 class="modal-title" id="deleteModalLabel{{ course[0] }}">Delete Course</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Are you sure you want to delete this course?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <form method="POST" action="/delete_courses/{{ course[0] }}">
+                    <input type="hidden" name="course_id" value="{{ course[0] }}">
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
+
 {% endblock %}
