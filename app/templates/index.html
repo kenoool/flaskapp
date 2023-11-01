@@ -6,55 +6,55 @@
     <title>{% block title %}Student Info{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link href="{{ url_for('static', filename='css/bootstrap.min.css') }}" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-    <style>
-        body {
-            min-height: 100vh;
-        }
-        table {
-            border-collapse: collapse;
-            width: 100%;
-        }
-        th, td {
-            border: 1px solid black; /* Set the border to solid black */
-            padding: 8px;
-            text-align: left;
-        }
-    </style>
+   
+
 </head>
+<body class="bg-light">
 
-<body class="bg-gradient-to-r from-blue-100 via-teal-100 to-orange-900">
+    <div class="container">
+        <header class="bg-dark text-white py-4 text-center" style="background-image: url('your-image.jpg'); background-size: cover;">
+            <h1 class="h2 font-weight-bold">STUDENT INFORMATION SYSTEM</h1>
+        </header>        
 
-    <div>
-        <div class="container mx-auto p-4">
-            <h1 class="bg-blue-500 text-white py-4 font-extrabold text-lg text-center">STUDENT INFORMATION SYSTEM</h1>
-            <nav class="bg-light py-4 text-center">
-                <ul class="flex justify-center">
-                    <li class="mr-4 {% if request.path == '/students' %}bg-blue-100 text-white{% endif %}">
-                        <a class="text-blue-600 hover:text-blue-700" href="/students">Students</a>
-                    </li>
-                    <li class="mr-4 {% if request.path == '/courses' %}bg-blue-100 text-white{% endif %}">
-                        <a class="text-blue-600 hover:text-blue-700" href="/courses">Courses</a>
-                    </li>
-                    <li class="{% if request.path == '/colleges' %}bg-blue-100 text-white{% endif %}">
-                        <a class="text-blue-600 hover:text-blue-700" href="/colleges">Colleges</a>
-                    </li>
-                </ul>
-            </nav>
-
+        <nav class="navbar navbar-expand-lg bg-body-tertiary">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <div class="d-flex justify-content-center">
+                    <ul class="navbar-nav">
+                        <li class="nav-item {% if request.path == '/students' %}active{% endif %}">
+                            <a class="nav-link" href="/students">Students</a>
+                        </li>
+                        <li class="nav-item {% if request.path == '/courses' %}active{% endif %}">
+                            <a class="nav-link" href="/courses">Courses</a>
+                        </li>
+                        <li class="nav-item {% if request.path == '/colleges' %}active{% endif %}">
+                            <a class="nav-link" href="/colleges">Colleges</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+        
+        <main class="my-4">
             {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                    {% for message in messages %}
-                        <div class="bg-green-300 p-2 my-2 text-green-900">{{ message }}</div>
-                    {% endfor %}
+                    <div class="alert alert-success">
+                        <ul class="list-unstyled">
+                            {% for message in messages %}
+                                <li>{{ message }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
                 {% endif %}
             {% endwith %}
-
+            
             {% block content %}{% endblock %}
-        </div>
+        </main>
     </div>
 
     <script type="text/javascript" src="{{ url_for('static', filename='js/jquery-3.2.1.min.js') }}"></script>

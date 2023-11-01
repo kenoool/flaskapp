@@ -28,7 +28,7 @@ def insert_students():
         cur = mysql.connection.cursor()
 
         # Retrieve the course name based on the course_code
-        cur.execute("SELECT name FROM courses WHERE code = %s", (course_code,))
+        cur.execute("SELECT code FROM courses WHERE code = %s", (course_code,))
         course = cur.fetchone()
 
         if course:
