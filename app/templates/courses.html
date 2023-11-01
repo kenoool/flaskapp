@@ -9,7 +9,14 @@
         <h2 class="text-3xl font-semibold text-gray-800">Courses</h2>
         <button class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus-outline-none focus-shadow-outline" data-toggle="modal" data-target="#createModal">Create</button>
     </div>
-
+    <form method="POST" action="/search_courses">
+        <div class="mb-4">
+            <label for="search" class="block text-gray-700 font-bold mb-2">Search by Code, Name, or College:</label>
+            <input type="text" name="search" id="search" class="border rounded w-full py-2 px-3" placeholder="Enter Code, Name, or College to search">
+        </div>
+        <button type="submit" class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus-outline-none focus-shadow-outline">Search</button>
+    </form>    
+    <br>
     <table class="table-auto w-full border-collapse">
         <thead>
             <tr class="bg-blue-500 text-white">

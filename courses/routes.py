@@ -24,7 +24,7 @@ def insert_courses():
         cur = mysql.connection.cursor()
 
         # Retrieve the college name based on the college_code
-        cur.execute("SELECT name FROM colleges WHERE code = %s", (college_code,))
+        cur.execute("SELECT code FROM colleges WHERE code = %s", (college_code,))
         college = cur.fetchone()
 
         if college:
@@ -60,4 +60,18 @@ def delete_courses(course_id):
         mysql.connection.commit()
         flash("Course Deleted Successfully")
         cur.close()  # Close the cursor after the operation
+    return redirect(url_for('courses.courses_page'))
+
+@courses.route('/search_courses', methods=['POST'])
+def search_courses():
+    if request.method == 'POST':
+        search_input = request.form.get('search')
+        cur = mysql.connection.cursor()
+        # Perform a general search by code, name, or college_name and fetch matching courses
+        cur.execute("SELECT * FROM courses WHERE code LIKE %s OR name LIKE %s OR college_name LIKE %s", ('%' + search_input + '%', '%' + search_input + '%', '%' + search_input + '%'))
+        searched_courses = cur.fetchall()
+        cur.close()
+
+        flash(f'Search results for "{search_input}": {len(searched_courses)} courses found')
+        return render_template('courses.html', courses=searched_courses)
     return redirect(url_for('courses.courses_page'))

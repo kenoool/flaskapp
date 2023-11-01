@@ -60,7 +60,7 @@ def update_students(student_id):
         SET id = %s, firstname=%s, lastname=%s, course_name=%s, year=%s, gender=%s
         WHERE student_id=%s
         """, (new_id, firstname, lastname, course_code, year, gender, student_id))
-        flash("Data Updated Successfully")
+        flash("Student Updated Successfully")
         mysql.connection.commit()
         return redirect(url_for('students.students_page'))
 
@@ -71,6 +71,20 @@ def delete_students(student_id):
         cur = mysql.connection.cursor()
         cur.execute("DELETE FROM students WHERE student_id = %s", (student_id,))
         mysql.connection.commit()
-        flash("Data Deleted Successfully")
+        flash("Student Deleted Successfully")
         cur.close()
+    return redirect(url_for('students.students_page'))
+
+@students.route('/search_students', methods=['POST'])
+def search_students():
+    if request.method == 'POST':
+        search_input = request.form.get('search')
+        cur = mysql.connection.cursor()
+        # Perform a general search by id, firstname, lastname, course_name, year, or gender and fetch matching students
+        cur.execute("SELECT * FROM students WHERE id LIKE %s OR firstname LIKE %s OR lastname LIKE %s OR course_name LIKE %s OR year LIKE %s OR gender LIKE %s", ('%' + search_input + '%', '%' + search_input + '%', '%' + search_input + '%', '%' + search_input + '%', '%' + search_input + '%', '%' + search_input + '%'))
+        searched_students = cur.fetchall()
+        cur.close()
+
+        flash(f'Search results for "{search_input}": {len(searched_students)} students found')
+        return render_template('students.html', students=searched_students)
     return redirect(url_for('students.students_page'))

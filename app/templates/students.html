@@ -9,6 +9,14 @@
             <button class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus-outline-none focus-shadow-outline" data-toggle="modal" data-target="#createModal">Create</button>
         </div>
 
+        <form method="POST" action="/search_students">
+            <div class="mb-4">
+                <label for="search" class="block text-gray-700 font-bold mb-2">Search by ID, First Name, Last Name, Course, Year, or Gender:</label>
+                <input type="text" name="search" id="search" class="border rounded w-full py-2 px-3" placeholder="Enter ID, First Name, Last Name, Course, Year, or Gender to search">
+            </div>
+            <button type="submit" class="bg-blue-500 hover-bg-blue-700 text-white font-bold py-2 px-4 rounded focus-outline-none focus-shadow-outline">Search</button>
+        </form>
+        <br>       
         <table class="table-auto w-full border-collapse">
             <thead>
                 <tr class="bg-blue-500 text-white">

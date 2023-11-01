@@ -53,3 +53,17 @@ def delete_colleges(college_id):
         mysql.connection.commit()
         flash("College Deleted Successfully")
     return redirect(url_for('colleges.colleges_page'))
+
+@colleges.route('/search_colleges', methods=['POST'])
+def search_colleges():
+    if request.method == 'POST':
+        search_input = request.form.get('search')
+        cur = mysql.connection.cursor()
+        # Perform a search by code or name and fetch matching colleges
+        cur.execute("SELECT * FROM colleges WHERE code LIKE %s OR name LIKE %s", ('%' + search_input + '%', '%' + search_input + '%'))
+        searched_colleges = cur.fetchall()
+        cur.close()
+
+        flash(f'Search results for "{search_input}": {len(searched_colleges)} colleges found')
+        return render_template('colleges.html', colleges=searched_colleges)
+    return redirect(url_for('colleges.colleges_page'))
