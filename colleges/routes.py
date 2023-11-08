@@ -14,45 +14,60 @@ def colleges_page():
 @colleges.route('/insert_colleges', methods=['POST'])
 def insert_colleges():
     if request.method == 'POST':
-        userDetails = request.form
-        college_code = userDetails['code']
-        college_name = userDetails['name']
+        try:
+            userDetails = request.form
+            college_code = userDetails['code']
+            college_name = userDetails['name']
 
-        cur = mysql.connection.cursor()
+            cur = mysql.connection.cursor()
 
-        # Check if the college code already exists
-        cur.execute("SELECT code FROM colleges WHERE code = %s", (college_code,))
-        result = cur.fetchone()
+            # Check if the college code already exists
+            cur.execute("SELECT code FROM colleges WHERE code = %s", (college_code,))
+            result = cur.fetchone()
 
-        if result is not None:
-            flash("College code already exists")
-            return redirect(url_for('colleges.colleges_page'))
+            if result is not None:
+                flash("College code already exists")
+                return redirect(url_for('colleges.colleges_page'))
 
-        # If the college code doesn't exist, insert the new college
-        cur.execute("INSERT INTO colleges(code, name) VALUES(%s, %s)", (college_code, college_name))
-        mysql.connection.commit()
-        flash("College Inserted Successfully")
+            # If the college code doesn't exist, insert the new college
+            cur.execute("INSERT INTO colleges(code, name) VALUES(%s, %s)", (college_code, college_name))
+            mysql.connection.commit()
+            flash("College Inserted Successfully")
+        except Exception as e:
+            flash(f"Error inserting college: {str(e)}")
+
+        cur.close()
         return redirect(url_for('colleges.colleges_page'))
 
 @colleges.route('/update_colleges/<int:college_id>', methods=['POST'])
-def update_colleges(college_id):  # Use 'college_id' as the parameter
+def update_colleges(college_id):
     if request.method == 'POST':
-        new_code = request.form['code']
-        name = request.form['name'] 
-        cur = mysql.connection.cursor()
-        cur.execute("UPDATE colleges SET code = %s, name = %s WHERE college_id = %s", (new_code, name, college_id))
-        mysql.connection.commit()
-        flash("College Updated Successfully")
-        return redirect(url_for('colleges.colleges_page'))
+        try:
+            new_code = request.form['code']
+            name = request.form['name']
+            cur = mysql.connection.cursor()
+            cur.execute("UPDATE colleges SET code = %s, name = %s WHERE college_id = %s", (new_code, name, college_id))
+            mysql.connection.commit()
+            flash("College Updated Successfully")
+        except Exception as e:
+            flash(f"Error updating college: {str(e)}")
 
+        return redirect(url_for('colleges.colleges_page'))
+    
 @colleges.route('/delete_colleges/<int:college_id>', methods=['GET', 'POST'])
 def delete_colleges(college_id):
     if request.method == 'POST':
-        cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM colleges WHERE college_id = %s", (college_id,))
-        mysql.connection.commit()
-        flash("College Deleted Successfully")
+        try:
+            cur = mysql.connection.cursor()
+            cur.execute("DELETE FROM colleges WHERE college_id = %s", (college_id,))
+            mysql.connection.commit()
+            flash("College Deleted Successfully")
+            cur.close()
+        except Exception as e:
+            flash(f"Error deleting college: {str(e)}")
+
     return redirect(url_for('colleges.colleges_page'))
+
 
 @colleges.route('/search_colleges', methods=['POST'])
 def search_colleges():

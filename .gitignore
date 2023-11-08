@@ -1,2 +1,5 @@
 venv/
 node_modules
+
+#.DS_Store, a hidden file created by macOS
+.DS_Store

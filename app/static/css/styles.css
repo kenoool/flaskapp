@@ -1,0 +1,141 @@
+body {
+    background: url('/static/leaves.jpg') center center no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    font-family: 'Poppins', sans-serif;
+   
+}
+
+/* Add some padding and margins for better spacing */
+.container {
+    margin-top: 20px;
+}
+
+.title {
+    background-color: #176d56;
+}
+.form-control {
+    margin-bottom: 10px;
+}
+
+/* Style the Create, Update, and Delete buttons */
+.btn-primary {
+    background-color: #176d56;
+    border-color: #354454;
+}
+
+.btn-primary:hover {
+    background-color: #3d927b;
+    border-color: #176d56;
+}
+
+.btn-danger {
+    background-color: #b9535d;
+    border-color: #dc3545;
+}
+
+.btn-danger:hover {
+    background-color: #b83441;
+    border-color: #bd2130;
+}
+
+/* Style modal headers */
+.modal-header {
+    background-color: #95e9c4;
+    color: #dd8f8f;
+    border: none;
+}
+
+/* Add some margin to the modals for better spacing */
+.modal-content {
+    margin: 20px;
+}
+
+/* Style the table headers */
+.table thead th {
+    background-color: #3f8d78;
+    color: #fff;
+    font-weight: 500;
+    border: none;
+}
+
+/* Style the table rows on hover */
+.table tbody tr:hover {
+    background-color: #3f8d78;
+}
+
+/* Add some padding to the modal bodies */
+.modal-body {
+    padding: 20px;
+    background-color: transparent;
+}
+
+/* Style the Close button in modals */
+.close {
+    color: #fff;
+}
+
+/* Style the modal footer */
+.modal-footer {
+    border: none;
+}
+
+/* Center modal titles */
+.modal-title {
+    margin: 0 auto;
+}
+
+/* Add some space above and below the main content */
+.mt-5 {
+    margin-top: 40px;
+}
+
+/* Style the search input and button */
+.search-input {
+    border-radius: 0;
+}
+
+/* Style the page title */
+h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+/* Style the form labels */
+label {
+    font-weight: bold;
+}
+
+/* Style the delete confirmation message */
+.modal-body p {
+    font-weight: bold;
+}
+/* Add some space between form elements */
+.form-group {
+    margin-bottom: 15px;
+}
+/* Define a custom background color for the modal header in the "Create Student" modal */
+.bg-custom {
+    background-color: #176d56; /* Custom background color */
+}
+
+/* Adjust the font size as needed */
+.navbar-nav .nav-item .nav-link {
+    font-size: 20px;
+    border-radius: 10px;
+}
+
+/* Add a background color change on hover if desired */
+.navbar-nav .nav-item a.nav-link:hover {
+    background-color: #79a197;
+    text-decoration: none;
+    border-radius: 10px;
+    transition: 0.2s;
+}
+

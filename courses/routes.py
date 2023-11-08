@@ -16,51 +16,63 @@ def courses_page():
 @courses.route('/insert_courses', methods=['POST'])
 def insert_courses():
     if request.method == 'POST':
-        courseDetails = request.form
-        code = courseDetails['code']
-        name = courseDetails['name']
-        college_code = courseDetails['college_code']  # This is the selected college code from the form
+        try:
+            courseDetails = request.form
+            code = courseDetails['code']
+            name = courseDetails['name']
+            college_code = courseDetails['college_code']
 
-        cur = mysql.connection.cursor()
+            cur = mysql.connection.cursor()
 
-        # Retrieve the college name based on the college_code
-        cur.execute("SELECT code FROM colleges WHERE code = %s", (college_code,))
-        college = cur.fetchone()
+            # Check if the college exists
+            cur.execute("SELECT code FROM colleges WHERE code = %s", (college_code,))
+            college = cur.fetchone()
 
-        if college:
-            # College code exists, so you can insert the course with the retrieved college_name
-            college_name = college[0]
-            cur.execute("INSERT INTO courses (code, name, college_name) VALUES (%s, %s, %s)", (code, name, college_name))
-            mysql.connection.commit()
-            flash("Course Inserted Successfully")
-        else:
-            # College code doesn't exist, handle the error or show an appropriate message
-            flash("Invalid College Code")
+            if college:
+                college_name = college[0]
+                cur.execute("INSERT INTO courses (code, name, college_name) VALUES (%s, %s, %s)", (code, name, college_name))
+                mysql.connection.commit()
+                flash("Course Inserted Successfully")
+            else:
+                flash("Invalid College Code")
 
-        cur.close()  # Close the cursor after the operation
+            cur.close()
+        except Exception as e:
+            flash(f"Error inserting course: {str(e)}")
+
         return redirect(url_for('courses.courses_page'))
 
 @courses.route('/update_courses/<int:course_id>', methods=['POST'])
 def update_courses(course_id):
     if request.method == 'POST':
-        new_code = request.form['code']
-        name = request.form['name']
-        college_code = request.form['college_code'] 
-        cur = mysql.connection.cursor()
-        cur.execute("UPDATE courses SET code = %s, name = %s, college_name = %s WHERE course_id = %s", (new_code, name, college_code, course_id))
-        mysql.connection.commit()
-        flash("Course Updated Successfully")
+        try:
+            new_code = request.form['code']
+            name = request.form['name']
+            college_code = request.form['college_code']
+
+            cur = mysql.connection.cursor()
+            cur.execute("UPDATE courses SET code = %s, name = %s, college_name = %s WHERE course_id = %s", (new_code, name, college_code, course_id))
+            mysql.connection.commit()
+            flash("Course Updated Successfully")
+        except Exception as e:
+            flash(f"Error updating course: {str(e)}")
+
         return redirect(url_for('courses.courses_page'))
 
 @courses.route('/delete_courses/<int:course_id>', methods=['GET', 'POST'])
 def delete_courses(course_id):
     if request.method == 'POST':
-        cur = mysql.connection.cursor()
-        cur.execute("DELETE FROM courses WHERE course_id = %s", (course_id,))
-        mysql.connection.commit()
-        flash("Course Deleted Successfully")
-        cur.close()  # Close the cursor after the operation
+        try:
+            cur = mysql.connection.cursor()
+            cur.execute("DELETE FROM courses WHERE course_id = %s", (course_id,))
+            mysql.connection.commit()
+            flash("Course Deleted Successfully")
+            cur.close()
+        except Exception as e:
+            flash(f"Error deleting course: {str(e)}")
+
     return redirect(url_for('courses.courses_page'))
+
 
 @courses.route('/search_courses', methods=['POST'])
 def search_courses():

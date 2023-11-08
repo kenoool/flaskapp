@@ -6,7 +6,7 @@
     <div class="container mt-5">
         <form method="POST" action="/search_courses" class="mt-3">
             <div class="input-group">
-                <input type="text" name="search" class="form-control search-input" style="width: 500px;" placeholder="Search courses by Code, Name, or College">
+                <input type="text" name="search" class="form-control search-input" style="width: 250px;" placeholder="Search courses">
                 <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </form>
@@ -44,7 +44,7 @@
     <div class="modal fade" id="createModal" tabindex="-1" role="dialog" aria-labelledby="createModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header bg-custom text-white">
                     <h5 class="modal-title" id="createModalLabel">Create Course</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -80,7 +80,7 @@
         <div class="modal fade" id="updateModal{{ course[0] }}" tabindex="-1" role="dialog" aria-labelledby="updateModalLabel{{ course[0] }}" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
-                    <div class="modal-header bg-primary text-white">
+                    <div class="modal-header bg-custom text-white">
                         <h5 class="modal-title" id="updateModalLabel{{ course[0] }}">Update Course</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -94,7 +94,7 @@
                                 <select name="college_code" id="college_code" class="form-control">
                                     <option value="">Select College</option>
                                     {% for college in colleges %}
-                                        <option value="{{ college[1] }}">{{ college[1] }}</option>
+                                        <option value="{{ college[1] }}" {% if college[1] == course[4] %}selected{% endif %}>{{ college[1] }}</option>
                                     {% endfor %}
                                 </select>
                             </div>
