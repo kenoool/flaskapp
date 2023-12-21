@@ -1,0 +1,51 @@
+<!-- templates/students/add_student.html -->
+{% extends 'index.html' %}
+
+{% block title %}Students{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Add this form section -->
+    <form method="POST" action="{{ url_for('students.add_student') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}  <!-- Include CSRF token -->
+
+        <div class="form-group">
+            {{ form.image_url.label(class="form-label") }}
+            {{ form.image_url(class="form-control", type="file") }}
+        </div>      
+        
+        <div class="form-group">
+            {{ form.id.label(class="form-label") }}
+            {{ form.id(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.firstname.label(class="form-label") }}
+            {{ form.firstname(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.lastname.label(class="form-label") }}
+            {{ form.lastname(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.course_code.label(class="form-label") }}
+            {{ form.course_code(class="form-select") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.year.label(class="form-label") }}
+            {{ form.year(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.gender.label(class="form-label") }}
+            {{ form.gender(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <!-- End of form section -->
+</div>
+{% endblock %}

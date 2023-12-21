@@ -1,16 +1,25 @@
 body {
-    background: url('/static/leaves.jpg') center center no-repeat;
-    background-size: cover;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
-    background-size: cover;
+    position: relative;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-
     font-family: 'Poppins', sans-serif;
-   
 }
+
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: url('/static/leaves.jpg') center center no-repeat;
+    background-size: cover;
+    opacity: 0.5; /* Adjust the opacity as needed */
+    z-index: -1;
+}
+
+
 
 /* Add some padding and margins for better spacing */
 .container {
@@ -67,7 +76,7 @@ body {
 
 /* Style the table rows on hover */
 .table tbody tr:hover {
-    background-color: #3f8d78;
+    background-color: #3f8d7863;
 }
 
 /* Add some padding to the modal bodies */
@@ -138,4 +147,3 @@ label {
     border-radius: 10px;
     transition: 0.2s;
 }
-

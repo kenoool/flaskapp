@@ -1,30 +1,42 @@
+# app/__init__.py
+
+import cloudinary.uploader
+import os
 from flask import Flask
 from flask_mysqldb import MySQL
-import yaml
+from flask_wtf.csrf import CSRFProtect
+from config import configure_cloudinary
 
-app = Flask(__name__)
-app.secret_key = "flash message"
-app.template_folder = "templates"
+mysql = MySQL()
+csrf = CSRFProtect()
 
+# Move the Cloudinary-related functions here
 
-# Configure the database
-with open('db.yaml', 'r') as yaml_file:
-    db = yaml.load(yaml_file, Loader=yaml.FullLoader)
+def create_app(test_config=None):
+    app = Flask(__name__, instance_relative_config=True)
+    app.config.from_pyfile('config.py', silent=True)
+    
+    # Load configuration from environment variables
+    app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
+    app.config['MYSQL_USER'] = os.getenv('DB_USER')
+    app.config['MYSQL_PASSWORD'] = os.getenv('DB_PASSWORD')
+    app.config['MYSQL_DB'] = os.getenv('DB_NAME')
+    app.config['MYSQL_HOST'] = os.getenv('DB_HOST')
+    app.config['MYSQL_PORT'] = int(os.getenv('DB_PORT', default=3306))
+    app.config['BOOTSTRAP_SERVE_LOCAL'] = os.getenv('BOOTSTRAP_SERVE_LOCAL')
+    app.config['UPLOAD_FOLDER'] = 'students/'
 
-app.config['MYSQL_HOST'] = db['mysql_host']
-app.config['MYSQL_USER'] = db['mysql_user']
-app.config['MYSQL_PASSWORD'] = db['mysql_password']
-app.config['MYSQL_DB'] = db['mysql_db']
+    mysql.init_app(app)
+    csrf.init_app(app)
+    configure_cloudinary(app)
 
-mysql = MySQL(app)
+    # ... register blueprints and other configurations
 
-# Import and register Blueprints here
-from app.routes import app as app_blueprint
-app.register_blueprint(app_blueprint)
+    from .students import students as students_blueprint
+    app.register_blueprint(students_blueprint)
+    from .courses import courses as courses_blueprint
+    app.register_blueprint(courses_blueprint)
+    from .colleges import colleges as colleges_blueprint
+    app.register_blueprint(colleges_blueprint)
 
-from students.routes import students
-from courses.routes import courses
-from colleges.routes import colleges
-app.register_blueprint(students)
-app.register_blueprint(courses)
-app.register_blueprint(colleges)
+    return app

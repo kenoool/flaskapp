@@ -1,0 +1,27 @@
+{% extends 'index.html' %}
+
+{% block title %}Colleges{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Update this form section -->
+    <!-- update_college.html -->
+    <form method="POST" action="{{ url_for('colleges.update_college', code=code) }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}  <!-- Include CSRF token -->
+
+        <div class="form-group">
+            {{ form.code.label }}
+            {{ form.code(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.name.label }}
+            {{ form.name(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+
+    <!-- End of form section -->
+</div>
+{% endblock %}

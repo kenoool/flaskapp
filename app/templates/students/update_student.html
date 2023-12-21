@@ -1,0 +1,56 @@
+{% extends 'index.html' %}
+
+{% block title %}Edit Student{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Edit this form section -->
+    <form method="POST" action="{{ url_for('.update_student', id=student.id) }}" enctype="multipart/form-data">
+    
+        {{ form.hidden_tag() }}  <!-- Include CSRF token -->
+        
+        <div class="form-group">
+            {{ form.image_url.label(class="form-label") }}
+            {{ form.image_url(class="form-control", type="file") }}
+
+            {% if student.image_url %}
+                <img src="{{ student.image_url }}" alt="Student Photo" style="max-width: 200px; max-height: 200px;">
+                <p>Current Image:</p>
+                <a href="{{ student.image_url }}" target="_blank">View Image</a>
+            {% endif %}
+        </div>
+        
+        <div class="form-group">
+            {{ form.id.label }}
+            {{ form.id(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.firstname.label }}
+            {{ form.firstname(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.lastname.label }}
+            {{ form.lastname(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.course_code.label }}
+            {{ form.course_code(class="form-select") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.year.label }}
+            {{ form.year(class="form-control") }}
+        </div>
+
+        <div class="form-group">
+            {{ form.gender.label }}
+            {{ form.gender(class="form-control") }}
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update</button>
+    </form>
+</div>
+{% endblock %}
