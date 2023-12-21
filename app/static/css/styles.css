@@ -3,7 +3,7 @@ body {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Lato', sans-serif;
 }
 
 body::before {
@@ -26,6 +26,13 @@ body::before {
     margin-top: 20px;
 }
 
+.container h1 {
+    font-size: 40px;
+}
+.container span{
+    font-size: 22px;
+}
+
 .title {
     background-color: #176d56;
 }
@@ -37,11 +44,13 @@ body::before {
 .btn-primary {
     background-color: #176d56;
     border-color: #354454;
+    text-align: center;
 }
 
 .btn-primary:hover {
-    background-color: #3d927b;
+    background-color: #299d61;
     border-color: #176d56;
+    color: #ffff;
 }
 
 .btn-danger {
@@ -72,6 +81,20 @@ body::before {
     color: #fff;
     font-weight: 500;
     border: none;
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+}
+
+.table td {
+    background-color: #76e6a823;
+    color: #323232;
+    font-weight: 400;
+    border: none;
+    font-size: 18px;
+    text-align: center;
+    font-family: 'Lato', sans-serif;
+
 }
 
 /* Style the table rows on hover */
