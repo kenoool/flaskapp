@@ -5,6 +5,19 @@
 
 {% block content %}
 <div class="container mt-5">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Oops!</h4>
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    {% endwith %}
+
     <!-- Add this form section -->
     <form method="POST" action="{{ url_for('students.add_student') }}" enctype="multipart/form-data">
         {{ form.hidden_tag() }}  <!-- Include CSRF token -->

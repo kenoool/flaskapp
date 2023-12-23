@@ -24,16 +24,17 @@ class Students(object):
     def all(cls, search_term=None):
         try:
             with mysql.connection.cursor() as curs:
-                sql = "SELECT id, firstname, lastname, course_code, year, gender, image_url FROM students"
+                sql = "SELECT s.id, s.firstname, s.lastname, s.course_code, s.year, s.gender, s.image_url, c.college_code FROM students s LEFT JOIN courses c ON s.course_code = c.code"
 
                 if search_term:
                     conditions = [
-                        f"id LIKE %s",
-                        f"firstname LIKE %s",
-                        f"lastname LIKE %s",
-                        f"course_code LIKE %s",
-                        f"year LIKE %s",
-                        f"gender = %s",  # Use = for exact match
+                        f"s.id LIKE %s",
+                        f"s.firstname LIKE %s",
+                        f"s.lastname LIKE %s",
+                        f"s.course_code LIKE %s",
+                        f"s.year LIKE %s",
+                        f"s.gender LIKE %s",
+                        f"c.college_code LIKE %s",  # Add condition for college code
                     ]
 
                     where_clause = " OR ".join(conditions)
@@ -41,18 +42,33 @@ class Students(object):
 
                     search_pattern = f"%{search_term}%"
                     # Add wildcards to search for partial matches in string columns
-                    curs.execute(sql, (search_pattern,) * 5 + (search_term,))
+                    curs.execute(sql, (search_pattern,) * 7)
                 else:
                     curs.execute(sql)
 
                 result = curs.fetchall()
 
-            return [cls(id=row[0], firstname=row[1], lastname=row[2], course_code=row[3], year=row[4], gender=row[5], image_url=row[6]) for row in result]
+            students_data = []
+            for row in result:
+                student = cls(
+                    id=row[0],
+                    firstname=row[1],
+                    lastname=row[2],
+                    course_code=row[3],
+                    year=row[4],
+                    gender=row[5],
+                    image_url=row[6]
+                )
+                student.college_code = row[7]  # Assign college code from the result
+                students_data.append(student)
+
+            return students_data
 
         except Exception as e:
             print(f"Error fetching all students: {e}")
             return []
 
+            
     @classmethod
     def get_by_id(cls, student_id):
         try:
@@ -111,3 +127,22 @@ class Students(object):
         sql = "DELETE FROM students WHERE id=%s"
         curs.execute(sql, (self.id,))
         conn.commit()
+
+    @classmethod
+    def get_college_code_by_course_code(cls, course_code):
+        try:
+            with mysql.connection.cursor() as curs:
+                # Assuming there is a column named 'college_code' in the 'courses' table
+                sql = "SELECT college_code FROM courses WHERE code = %s"
+                curs.execute(sql, (course_code,))
+                result = curs.fetchone()
+
+            if result:
+                return result[0]
+            else:
+                return None
+
+        except Exception as e:
+            print(f"Error fetching college code by course code: {e}")
+            return None
+

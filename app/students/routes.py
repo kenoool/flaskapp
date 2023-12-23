@@ -30,6 +30,11 @@ def student():
 
     return render_template('students/students.html', students=students_data, form=form)
 
+def handle_error(error, duplicate_message='Student with this id already exists.', generic_message='Failed to perform the operation.'):
+    if "Duplicate entry" in str(error.args):
+        flash(f'Error: {duplicate_message}', 'danger')
+    else:
+        flash(f'Error: {generic_message}', 'danger')
 
 @students.route("/add_student", methods=['POST', 'GET'])
 def add_student():
@@ -39,20 +44,27 @@ def add_student():
     form.set_course_choices()
 
     if request.method == 'POST':
+
+        if form.image_url.data and not is_image_file(form.image_url.data.filename):
+            flash('Error: Only image files (jpg, jpeg, png, svg) are allowed for the photo.', 'danger')
+            return render_template('students/add_student.html', form=form)
+        # Check file-related conditions before calling validate_on_submit
+        if not is_file_size_valid(form.image_url.data):
+            flash('Error: File size must be no more than 1 MB.', 'danger')
+            return render_template('students/add_student.html', form=form)
+
         if form.validate_on_submit():
             try:
                 image_url = None
 
                 if form.image_url.data:
-                    print("Received Image File:", form.image_url.data)
                     try:
                         # Use cloudinary.uploader.upload directly
                         response = cloudinary.uploader.upload(form.image_url.data, folder="Students")
                         image_url = response['url']
                     except Exception as e:
-                        print(f"Error: Cloudinary upload failed. {e}")
-                else:
-                    print("No Image File Received")
+                        flash(f'Error: Cloudinary upload failed. {e}', 'danger')
+                        return render_template('students/add_student.html', form=form)
 
                 student = Students(
                     id=form.id.data,
@@ -72,16 +84,38 @@ def add_student():
 
             except IntegrityError as e:
                 if "Duplicate entry" in str(e.args):
-                    flash('Error: Student with this id already exists.', 'danger')
+                    flash('Error: Student with this ID already exists. Please choose a different ID.', 'danger')
                 else:
                     flash('Error: Failed to add student.', 'danger')
 
         else:
-            flash('Error: All fields are required.', 'danger')
+            flash('Error: Please correct the form errors and try again.', 'danger')
             print(form.errors)
 
     # Pass an empty student instance to the template
     return render_template('students/add_student.html', form=form)
+
+
+
+def is_image_file(filename):
+    allowed_extensions = {'jpg', 'jpeg', 'png', 'svg'}
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in allowed_extensions
+
+
+def is_file_size_valid(file_field):
+    try:
+        file_size = len(file_field.read())
+        file_field.seek(0)  # Reset file cursor position
+        max_size = 1024 * 1024  # 1 MB
+
+        if file_size > max_size:
+            return False
+        else:
+            return True
+    except Exception as e:
+        print(f"Error checking file size: {e}")
+        return False
+
 
 @students.route("/update_student/<id>", methods=['GET', 'POST'])
 def update_student(id):
@@ -105,13 +139,21 @@ def update_student(id):
 
                 # Check if a new image is provided
                 if student.new_image_url:
-                    print("Received Image URL:", student.new_image_url)
+                    if not is_image_file(student.new_image_url.filename):
+                        flash('Error: Only image files (jpg, jpeg, png, svg) are allowed for the photo.', 'danger')
+                        return render_template('students/update_student.html', form=form, student=student, id=id)
+
+                    if not is_file_size_valid(student.new_image_url):
+                        flash('Error: File size must be no more than 1 MB.', 'danger')
+                        return render_template('students/update_student.html', form=form, student=student, id=id)
+
                     try:
                         # Use cloudinary.uploader.upload directly
                         response = cloudinary.uploader.upload(student.new_image_url, folder="Students")
                         student.new_image_url = response['url']
                     except Exception as e:
-                        print(f"Error: Cloudinary upload failed. {e}")
+                        flash(f'Error: Cloudinary upload failed. {e}', 'danger')
+                        return render_template('students/update_student.html', form=form, student=student, id=id)
 
                 # Update student data
                 student.update_student()
@@ -128,10 +170,11 @@ def update_student(id):
                 mysql.connection.rollback()
 
         else:
-            flash('Error: All fields are required.', 'danger')
+            flash('Error: Please correct the form errors and try again.', 'danger')
             print(form.errors)
 
     return render_template('students/update_student.html', form=form, student=student, id=id)
+
 
 @students.route("/delete_student/<string:id>", methods=['POST'])
 def delete_student(id):

@@ -5,6 +5,18 @@
 {% block content %}
 <div class="container mt-5">
     <!-- Edit this form section -->
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-danger">
+                <ul>
+                    {% for message in messages %}
+                        <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    {% endwith %}
+    
     <form method="POST" action="{{ url_for('.update_student', id=student.id) }}" enctype="multipart/form-data">
     
         {{ form.hidden_tag() }}  <!-- Include CSRF token -->
