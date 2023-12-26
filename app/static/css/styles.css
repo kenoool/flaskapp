@@ -24,6 +24,9 @@ body::before {
 /* Add some padding and margins for better spacing */
 .container {
     margin-top: 20px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .container h1 {
@@ -81,7 +84,7 @@ body::before {
     color: #fff;
     font-weight: 500;
     border: none;
-    font-size: 20px;
+    font-size: 18px;
     text-align: center;
     font-family: 'Lato', sans-serif;
 }
@@ -91,7 +94,7 @@ body::before {
     color: #323232;
     font-weight: 400;
     border: none;
-    font-size: 18px;
+    font-size: 17px;
     text-align: center;
     font-family: 'Lato', sans-serif;
 

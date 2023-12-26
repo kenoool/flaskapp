@@ -9,7 +9,7 @@ logging.basicConfig(level=logging.DEBUG)
 
 
 class Students(object):
-    def __init__(self, id=None, firstname=None, lastname=None, course_code=None, year=None, gender=None, new_id=None, image_url=None,  new_image_url=None):
+    def __init__(self, id=None, firstname=None, lastname=None, course_code=None, year=None, gender=None, new_id=None, image_url=None, new_image_url=None, college_name=None):
         self.id = id
         self.firstname = firstname
         self.lastname = lastname
@@ -17,14 +17,30 @@ class Students(object):
         self.year = year
         self.gender = gender
         self.new_id = new_id
-        self.image_url = image_url  # Update the attribute name
+        self.image_url = image_url
         self.new_image_url = new_image_url
+        self.college_name = college_name
+
 
     @classmethod
     def all(cls, search_term=None):
         try:
             with mysql.connection.cursor() as curs:
-                sql = "SELECT s.id, s.firstname, s.lastname, s.course_code, s.year, s.gender, s.image_url, c.college_code FROM students s LEFT JOIN courses c ON s.course_code = c.code"
+                sql = """
+                    SELECT 
+                        s.id, 
+                        s.firstname, 
+                        s.lastname, 
+                        s.course_code, 
+                        s.year, 
+                        s.gender, 
+                        s.image_url, 
+                        c.college_code,
+                        co.name AS college_name  -- Alias for college name
+                    FROM students s
+                    LEFT JOIN courses c ON s.course_code = c.code
+                    LEFT JOIN colleges co ON c.college_code = co.code  -- Join with colleges table to get college name
+                """
 
                 if search_term:
                     conditions = [
@@ -35,6 +51,7 @@ class Students(object):
                         f"s.year LIKE %s",
                         f"s.gender LIKE %s",
                         f"c.college_code LIKE %s",  # Add condition for college code
+                        f"co.name LIKE %s",  # Add condition for college name
                     ]
 
                     where_clause = " OR ".join(conditions)
@@ -42,7 +59,7 @@ class Students(object):
 
                     search_pattern = f"%{search_term}%"
                     # Add wildcards to search for partial matches in string columns
-                    curs.execute(sql, (search_pattern,) * 7)
+                    curs.execute(sql, (search_pattern,) * 8)
                 else:
                     curs.execute(sql)
 
@@ -60,6 +77,7 @@ class Students(object):
                     image_url=row[6]
                 )
                 student.college_code = row[7]  # Assign college code from the result
+                student.college_name = row[8]  # Assign college name from the result
                 students_data.append(student)
 
             return students_data
@@ -67,6 +85,7 @@ class Students(object):
         except Exception as e:
             print(f"Error fetching all students: {e}")
             return []
+
 
             
     @classmethod
